@@ -1,5 +1,5 @@
 resource "aws_launch_configuration" "demo_aws" {
-  image_id = "ami-fd6c94eb"
+  image_id = "ami-b2df2ca4"
   instance_type = "t2.micro"
   key_name = "dev"
   enable_monitoring = false
@@ -11,12 +11,12 @@ resource "aws_launch_configuration" "demo_aws" {
 
   user_data = <<EOF
 runcmd:
-  - docker run -d -p 80:80 tutum/hello-world
+  - docker run -d -p 80:8080 tutum/hello-world
 EOF
 }
 
 resource "aws_autoscaling_group" "demo_aws" {
-  launch_configuration = "${aws_launch_configuration.demo_aws}"
+  launch_configuration = "${aws_launch_configuration.demo_aws.name}"
 
   max_size = 4
   min_size = 2
@@ -26,7 +26,7 @@ resource "aws_autoscaling_group" "demo_aws" {
   force_delete = false
   default_cooldown = 120
 
-  load_balancers = ["${aws_elb.demo_aws}"]
+  load_balancers = ["${aws_elb.demo_aws.name}"]
 
   availability_zones = ["${var.availability_zones}"]
 
