@@ -10,8 +10,9 @@ resource "aws_launch_configuration" "demo_aws" {
   }
 
   user_data = <<EOF
+#cloud-config
 runcmd:
-  - docker run -d -p 80:8080 tutum/hello-world
+  - docker run -d -p 8080:80 tutum/hello-world
 EOF
 }
 
@@ -40,8 +41,7 @@ resource "aws_autoscaling_group" "demo_aws" {
 resource "aws_elb" "demo_aws" {
   security_groups = ["${var.security_groups}"]
   cross_zone_load_balancing = true
-  internal = true
-  subnets = ["${var.subnets}"]
+  availability_zones = ["${var.availability_zones}"]
 
   listener {
     instance_port = 8080
@@ -53,7 +53,7 @@ resource "aws_elb" "demo_aws" {
   health_check {
     healthy_threshold = 2
     interval = 60
-    target = "HTTP:80/health"
+    target = "HTTP:8080/"
     timeout = 10
     unhealthy_threshold = 2
   }

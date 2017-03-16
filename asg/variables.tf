@@ -17,8 +17,3 @@ variable "availability_zones" {
   type = "list"
   description = "Availability zones for the instances"
 }
-
-variable "subnets" {
-  type = "list"
-  description = "Subnets to be used for the instances"
-}
