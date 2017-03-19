@@ -52,7 +52,7 @@ resource "aws_elb" "demo_aws" {
 
   health_check {
     healthy_threshold = 2
-    interval = 60
+    interval = 30
     target = "HTTP:8080/"
     timeout = 10
     unhealthy_threshold = 2
